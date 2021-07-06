@@ -88,7 +88,7 @@ EventTarget.prototype.dispatchEvent = function (event) {
  */
 module.exports = EventTarget;
 
-},{"yaeti":30}],3:[function(_dereq_,module,exports){
+},{"yaeti":31}],3:[function(_dereq_,module,exports){
 /**
  * Expose the MediaDeviceInfo class.
  */
@@ -202,7 +202,7 @@ MediaDevices.prototype.getSupportedConstraints = function () {
 	};
 };
 
-},{"./EventTarget":2,"./enumerateDevices":19,"./getUserMedia":20}],5:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"./enumerateDevices":19,"./getUserMedia":21}],5:[function(_dereq_,module,exports){
 /**
  * Expose the MediaStream class.
  */
@@ -714,7 +714,7 @@ function onEvent(data) {
 	}
 }
 
-},{"./EventTarget":2,"./MediaStreamTrack":7,"cordova/exec":undefined,"debug":23}],6:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"./MediaStreamTrack":7,"cordova/exec":undefined,"debug":24}],6:[function(_dereq_,module,exports){
 /**
  * Expose the MediaStreamRenderer class.
  */
@@ -1124,7 +1124,7 @@ function getElementPositionAndSize() {
 	};
 }
 
-},{"./EventTarget":2,"./MediaStream":5,"cordova/exec":undefined,"debug":23,"random-number":28}],7:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"./MediaStream":5,"cordova/exec":undefined,"debug":24,"random-number":29}],7:[function(_dereq_,module,exports){
 /**
  * Expose the MediaStreamTrack class.
  */
@@ -1291,7 +1291,7 @@ function onEvent(data) {
 	}
 }
 
-},{"./EventTarget":2,"./MediaTrackCapabilities":8,"./MediaTrackSettings":9,"./enumerateDevices":19,"cordova/exec":undefined,"debug":23}],8:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"./MediaTrackCapabilities":8,"./MediaTrackSettings":9,"./enumerateDevices":19,"cordova/exec":undefined,"debug":24}],8:[function(_dereq_,module,exports){
 /**
  * Expose the MediaTrackSettings class.
  */
@@ -1446,7 +1446,7 @@ function onEvent(data) {
 	}
 }
 
-},{"./EventTarget":2,"cordova/exec":undefined,"debug":23,"random-number":28}],11:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"cordova/exec":undefined,"debug":24,"random-number":29}],11:[function(_dereq_,module,exports){
 (function (setImmediate){
 /**
  * Expose the RTCDataChannel class.
@@ -1713,7 +1713,7 @@ function onEvent(data) {
 }
 
 }).call(this,_dereq_("timers").setImmediate)
-},{"./EventTarget":2,"cordova/exec":undefined,"debug":23,"random-number":28,"timers":29}],12:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"cordova/exec":undefined,"debug":24,"random-number":29,"timers":30}],12:[function(_dereq_,module,exports){
 /**
  * Expose the RTCIceCandidate class.
  */
@@ -2908,7 +2908,7 @@ function onEvent(data) {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./Errors":1,"./EventTarget":2,"./MediaStream":5,"./MediaStreamTrack":7,"./RTCDTMFSender":10,"./RTCDataChannel":11,"./RTCIceCandidate":12,"./RTCRtpReceiver":14,"./RTCRtpSender":15,"./RTCRtpTransceiver":16,"./RTCSessionDescription":17,"./RTCStatsReport":18,"cordova/exec":undefined,"debug":23,"random-number":28}],14:[function(_dereq_,module,exports){
+},{"./Errors":1,"./EventTarget":2,"./MediaStream":5,"./MediaStreamTrack":7,"./RTCDTMFSender":10,"./RTCDataChannel":11,"./RTCIceCandidate":12,"./RTCRtpReceiver":14,"./RTCRtpSender":15,"./RTCRtpTransceiver":16,"./RTCSessionDescription":17,"./RTCStatsReport":18,"cordova/exec":undefined,"debug":24,"random-number":29}],14:[function(_dereq_,module,exports){
 /**
  * Expose the RTCRtpReceiver class.
  */
@@ -2943,7 +2943,7 @@ RTCRtpReceiver.prototype.update = function ({ track, params }) {
 	this.params = params;
 };
 
-},{"random-number":28}],15:[function(_dereq_,module,exports){
+},{"random-number":29}],15:[function(_dereq_,module,exports){
 /**
  * Expose the RTCRtpSender class.
  */
@@ -3044,7 +3044,7 @@ RTCRtpSender.prototype.update = function ({ track, params }) {
 	this.params = params;
 };
 
-},{"./MediaStreamTrack":7,"cordova/exec":undefined,"random-number":28}],16:[function(_dereq_,module,exports){
+},{"./MediaStreamTrack":7,"cordova/exec":undefined,"random-number":29}],16:[function(_dereq_,module,exports){
 const RTCRtpSender = _dereq_('./RTCRtpSender');
 const RTCRtpReceiver = _dereq_('./RTCRtpReceiver');
 
@@ -3201,7 +3201,7 @@ RTCRtpTransceiver.prototype.update = function (data) {
 	this.sender.update(data.sender);
 };
 
-},{"./EventTarget":2,"./RTCRtpReceiver":14,"./RTCRtpSender":15,"cordova/exec":undefined,"debug":23,"random-number":28}],17:[function(_dereq_,module,exports){
+},{"./EventTarget":2,"./RTCRtpReceiver":14,"./RTCRtpSender":15,"cordova/exec":undefined,"debug":24,"random-number":29}],17:[function(_dereq_,module,exports){
 /**
  * Expose the RTCSessionDescription class.
  */
@@ -3296,7 +3296,64 @@ function getMediaDeviceInfos(devices) {
 	return mediaDeviceInfos;
 }
 
-},{"./Errors":1,"./MediaDeviceInfo":3,"cordova/exec":undefined,"debug":23}],20:[function(_dereq_,module,exports){
+},{"./Errors":1,"./MediaDeviceInfo":3,"cordova/exec":undefined,"debug":24}],20:[function(_dereq_,module,exports){
+/**
+ * Expose the getDisplayMedia function.
+ */
+module.exports = getDisplayMedia;
+
+/**
+ * Dependencies.
+ */
+var debug = _dereq_('debug')('iosrtc:getDisplayMedia'),
+	debugerror = _dereq_('debug')('iosrtc:ERROR:getDisplayMedia'),
+	exec = _dereq_('cordova/exec'),
+	MediaStream = _dereq_('./MediaStream'),
+	Errors = _dereq_('./Errors');
+
+function getDisplayMedia(constraints) {
+	// Detect callback usage to assist 5.0.1 to 5.0.2 migration
+	// TODO remove on 6.0.0
+	Errors.detectDeprecatedCallbaksUsage('cordova.plugins.iosrtc.getDisplayMedia', arguments);
+
+	debug('[original constraints:%o]', constraints);
+
+	var newConstraints = {};
+
+	if (
+		typeof constraints !== 'object' ||
+		(!constraints.hasOwnProperty('audio') && !constraints.hasOwnProperty('video'))
+	) {
+		return new Promise(function (resolve, reject) {
+			reject(
+				new Errors.MediaStreamError(
+					'constraints must be an object with at least "audio" or "video" keys'
+				)
+			);
+		});
+	}
+
+	debug('[computed constraints:%o]', newConstraints);
+
+	return new Promise(function (resolve, reject) {
+		function onResultOK(data) {
+			debug('getDisplayMedia() | success');
+			var stream = MediaStream.create(data.stream);
+			resolve(stream);
+			// Emit "connected" on the stream.
+			stream.emitConnected();
+		}
+
+		function onResultError(error) {
+			debugerror('getDisplayMedia() | failure: %s', error);
+			reject(new Errors.MediaStreamError('getDisplayMedia() failed: ' + error));
+		}
+
+		exec(onResultOK, onResultError, 'iosrtcPlugin', 'getDisplayMedia', [newConstraints]);
+	});
+}
+
+},{"./Errors":1,"./MediaStream":5,"cordova/exec":undefined,"debug":24}],21:[function(_dereq_,module,exports){
 /**
  * Expose the getUserMedia function.
  */
@@ -3757,7 +3814,7 @@ function getUserMedia(constraints) {
 	});
 }
 
-},{"./Errors":1,"./MediaStream":5,"cordova/exec":undefined,"debug":23}],21:[function(_dereq_,module,exports){
+},{"./Errors":1,"./MediaStream":5,"cordova/exec":undefined,"debug":24}],22:[function(_dereq_,module,exports){
 (function (global){
 /**
  * Variables.
@@ -3778,6 +3835,7 @@ var // Dictionary of MediaStreamRenderers.
 	exec = _dereq_('cordova/exec'),
 	domready = _dereq_('domready'),
 	getUserMedia = _dereq_('./getUserMedia'),
+	getDisplayMedia = _dereq_('./getDisplayMedia'),
 	enumerateDevices = _dereq_('./enumerateDevices'),
 	RTCPeerConnection = _dereq_('./RTCPeerConnection'),
 	RTCSessionDescription = _dereq_('./RTCSessionDescription'),
@@ -3794,6 +3852,7 @@ var // Dictionary of MediaStreamRenderers.
 module.exports = {
 	// Expose WebRTC classes and functions.
 	getUserMedia: getUserMedia,
+	getDisplayMedia: getDisplayMedia,
 	enumerateDevices: enumerateDevices,
 	getMediaDevices: enumerateDevices, // TMP
 	RTCPeerConnection: RTCPeerConnection,
@@ -3951,6 +4010,8 @@ function registerGlobals(doNotRestoreCallbacksSupport) {
 		restoreCallbacksSupport();
 	}
 
+	navigator.getDisplayMedia = getDisplayMedia;
+	navigator.mediaDevices.getDisplayMedia = getDisplayMedia;
 	navigator.getUserMedia = getUserMedia;
 	navigator.webkitGetUserMedia = getUserMedia;
 
@@ -4049,7 +4110,7 @@ function dump() {
 }
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{"./MediaDevices":4,"./MediaStream":5,"./MediaStreamTrack":7,"./RTCIceCandidate":12,"./RTCPeerConnection":13,"./RTCRtpTransceiver":16,"./RTCSessionDescription":17,"./enumerateDevices":19,"./getUserMedia":20,"./videoElementsHandler":22,"cordova/exec":undefined,"debug":23,"domready":25}],22:[function(_dereq_,module,exports){
+},{"./MediaDevices":4,"./MediaStream":5,"./MediaStreamTrack":7,"./RTCIceCandidate":12,"./RTCPeerConnection":13,"./RTCRtpTransceiver":16,"./RTCSessionDescription":17,"./enumerateDevices":19,"./getDisplayMedia":20,"./getUserMedia":21,"./videoElementsHandler":23,"cordova/exec":undefined,"debug":24,"domready":26}],23:[function(_dereq_,module,exports){
 /**
  * Expose a function that must be called when the library is loaded.
  * And also a helper function.
@@ -4436,7 +4497,7 @@ function releaseMediaStreamRenderer(video) {
 	delete video.readyState;
 }
 
-},{"./MediaStreamRenderer":6,"debug":23}],23:[function(_dereq_,module,exports){
+},{"./MediaStreamRenderer":6,"debug":24}],24:[function(_dereq_,module,exports){
 (function (process){
 /* eslint-env browser */
 
@@ -4704,7 +4765,7 @@ formatters.j = function (v) {
 };
 
 }).call(this,_dereq_('_process'))
-},{"./common":24,"_process":27}],24:[function(_dereq_,module,exports){
+},{"./common":25,"_process":28}],25:[function(_dereq_,module,exports){
 
 /**
  * This is the common logic for both the Node.js and web browser
@@ -4972,7 +5033,7 @@ function setup(env) {
 
 module.exports = setup;
 
-},{"ms":26}],25:[function(_dereq_,module,exports){
+},{"ms":27}],26:[function(_dereq_,module,exports){
 /*!
   * domready (c) Dustin Diaz 2014 - License MIT
   */
@@ -5004,7 +5065,7 @@ module.exports = setup;
 
 });
 
-},{}],26:[function(_dereq_,module,exports){
+},{}],27:[function(_dereq_,module,exports){
 /**
  * Helpers.
  */
@@ -5168,7 +5229,7 @@ function plural(ms, msAbs, n, name) {
   return Math.round(ms / n) + ' ' + name + (isPlural ? 's' : '');
 }
 
-},{}],27:[function(_dereq_,module,exports){
+},{}],28:[function(_dereq_,module,exports){
 // shim for using process in browser
 var process = module.exports = {};
 
@@ -5354,7 +5415,7 @@ process.chdir = function (dir) {
 };
 process.umask = function() { return 0; };
 
-},{}],28:[function(_dereq_,module,exports){
+},{}],29:[function(_dereq_,module,exports){
 void function(root){
 
   function defaults(options){
@@ -5400,7 +5461,7 @@ void function(root){
   module.exports.defaults = defaults
 }(this)
 
-},{}],29:[function(_dereq_,module,exports){
+},{}],30:[function(_dereq_,module,exports){
 (function (setImmediate,clearImmediate){
 var nextTick = _dereq_('process/browser.js').nextTick;
 var apply = Function.prototype.apply;
@@ -5479,14 +5540,14 @@ exports.clearImmediate = typeof clearImmediate === "function" ? clearImmediate :
   delete immediateIds[id];
 };
 }).call(this,_dereq_("timers").setImmediate,_dereq_("timers").clearImmediate)
-},{"process/browser.js":27,"timers":29}],30:[function(_dereq_,module,exports){
+},{"process/browser.js":28,"timers":30}],31:[function(_dereq_,module,exports){
 module.exports =
 {
 	EventTarget : _dereq_('./lib/EventTarget'),
 	Event       : _dereq_('./lib/Event')
 };
 
-},{"./lib/Event":31,"./lib/EventTarget":32}],31:[function(_dereq_,module,exports){
+},{"./lib/Event":32,"./lib/EventTarget":33}],32:[function(_dereq_,module,exports){
 (function (global){
 /**
  * In browsers export the native Event interface.
@@ -5495,7 +5556,7 @@ module.exports =
 module.exports = global.Event;
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
-},{}],32:[function(_dereq_,module,exports){
+},{}],33:[function(_dereq_,module,exports){
 function yaetiEventTarget()
 {
 	this._listeners = {};
@@ -5630,5 +5691,5 @@ yaetiEventTarget.prototype.dispatchEvent = function(event)
 
 module.exports = yaetiEventTarget;
 
-},{}]},{},[21])(21)
+},{}]},{},[22])(22)
 });

@@ -98,7 +98,7 @@ class PluginGetUserMedia {
 // Ignore Simulator cause does not support Camera
 #if !targetEnvironment(simulator)
 			let videoCapturer: RTCCameraVideoCapturer = RTCCameraVideoCapturer(delegate: rtcVideoSource!)
-			let videoCaptureController: PluginRTCVideoCaptureController = PluginRTCVideoCaptureController(capturer: videoCapturer)
+			let videoCaptureController: PluginRTCCameraCaptureController = PluginRTCCameraCaptureController(capturer: videoCapturer)
 			rtcVideoTrack!.videoCaptureController = videoCaptureController
 
 			let constraintsSatisfied = videoCaptureController.setConstraints(constraints: videoConstraints)

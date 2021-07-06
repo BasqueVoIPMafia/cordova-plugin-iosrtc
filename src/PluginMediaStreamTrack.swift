@@ -106,9 +106,11 @@ class PluginMediaStreamTrack : NSObject {
 		}
 	}
 
+	/*
 	func switchCamera() {
 		self.rtcMediaStreamTrack.videoCaptureController?.switchCamera()
 	}
+	*/
 
 	func registerRender(render: PluginMediaStreamRenderer) {
 		if let exist = self.renders[render.id] {

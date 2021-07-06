@@ -17,6 +17,7 @@ var // Dictionary of MediaStreamRenderers.
 	exec = require('cordova/exec'),
 	domready = require('domready'),
 	getUserMedia = require('./getUserMedia'),
+	getDisplayMedia = require('./getDisplayMedia'),
 	enumerateDevices = require('./enumerateDevices'),
 	RTCPeerConnection = require('./RTCPeerConnection'),
 	RTCSessionDescription = require('./RTCSessionDescription'),
@@ -33,6 +34,7 @@ var // Dictionary of MediaStreamRenderers.
 module.exports = {
 	// Expose WebRTC classes and functions.
 	getUserMedia: getUserMedia,
+	getDisplayMedia: getDisplayMedia,
 	enumerateDevices: enumerateDevices,
 	getMediaDevices: enumerateDevices, // TMP
 	RTCPeerConnection: RTCPeerConnection,
@@ -190,6 +192,8 @@ function registerGlobals(doNotRestoreCallbacksSupport) {
 		restoreCallbacksSupport();
 	}
 
+	navigator.getDisplayMedia = getDisplayMedia;
+	navigator.mediaDevices.getDisplayMedia = getDisplayMedia;
 	navigator.getUserMedia = getUserMedia;
 	navigator.webkitGetUserMedia = getUserMedia;
 

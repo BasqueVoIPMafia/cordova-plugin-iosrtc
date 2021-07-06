@@ -1,5 +1,6 @@
 import Foundation
 import AVFoundation
+import ReplayKit
 
 import func ObjectiveC.objc_getAssociatedObject
 import func ObjectiveC.objc_setAssociatedObject
@@ -52,22 +53,123 @@ extension RTCMediaStreamTrack {
 
 class PluginRTCVideoCaptureController : NSObject {
 
+	var isCapturing: Bool = false;
+
+	// Default to the front camera.
+	var device: AVCaptureDevice?
+	var deviceFormat: AVCaptureDevice.Format?
+	var deviceFrameRate: Int?
+
+	var constraints: NSDictionary = [:]
+
+	func startCapture(completionHandler: ((Error?) -> Void)? = nil) -> Bool {
+		return isCapturing;
+	}
+
+	func stopCapture() {
+
+	}
+}
+
+class PluginRTCScreenCaptureController : PluginRTCVideoCaptureController {
+
+	var capturer: RTCVideoCapturer
+	var source: RTCVideoSource
+	var recorder: RPScreenRecorder
+
+	init(capturer: RTCVideoCapturer, recorder: RPScreenRecorder, source: RTCVideoSource) {
+		self.capturer = capturer
+		self.recorder = recorder;
+		self.source = source;
+	}
+
+	override func startCapture(completionHandler: ((Error?) -> Void)? = nil) -> Bool {
+
+		// Stop previous capture in case of setConstraints, followed by startCapture
+		// aka future applyConstraints
+		if (isCapturing) {
+			stopCapture();
+		}
+
+		if #available(iOS 11.0, *) {
+			recorder.isMicrophoneEnabled = false
+			recorder.startCapture(handler: {(sampleBuffer, bufferType, error) in
+				if (bufferType == RPSampleBufferType.video) {
+					self.handleSourceBuffer(
+						source: self.source,
+						sampleBuffer: sampleBuffer,
+						sampleType: bufferType
+					)
+				}
+				if (error != nil) {
+					completionHandler!(error)
+				}
+			}) { (error) in
+				if (error != nil) {
+					completionHandler!(error)
+				} else {
+					// TODO Optional closure parameter
+					//completionHandler!()
+				}
+			}
+
+			isCapturing = true
+	
+			NSLog("PluginRTCScreenCaptureController#startCapture Capture started");
+		}
+
+		return isCapturing;
+	}
+
+	override func stopCapture() {
+		// TODO: stopCaptureWithCompletionHandler with DispatchSemaphore
+		if (isCapturing) {
+			if #available(iOS 11.0, *) {
+				recorder.stopCapture {(error) in
+					// TODO debug error
+				}
+				isCapturing = false
+
+				NSLog("PluginRTCScreenCaptureController#stopCapture Capture stopped");
+			}
+		}
+	}
+
+	func handleSourceBuffer(source: RTCVideoSource, sampleBuffer: CMSampleBuffer, sampleType: RPSampleBufferType) {
+		if (CMSampleBufferGetNumSamples(sampleBuffer) != 1 || !CMSampleBufferIsValid(sampleBuffer) ||
+			!CMSampleBufferDataIsReady(sampleBuffer)) {
+			return;
+		}
+
+		let pixelBuffer = CMSampleBufferGetImageBuffer(sampleBuffer);
+		if (pixelBuffer == nil) {
+			return;
+		}
+
+		let width = CVPixelBufferGetWidth(pixelBuffer!);
+		let height = CVPixelBufferGetHeight(pixelBuffer!);
+
+		source.adaptOutputFormat(toWidth: Int32(width/2), height: Int32(height/2), fps: 8)
+
+		let rtcPixelBuffer = RTCCVPixelBuffer(pixelBuffer: pixelBuffer!)
+		let timeStampNs =
+			CMTimeGetSeconds(CMSampleBufferGetPresentationTimeStamp(sampleBuffer)) * Float64(NSEC_PER_SEC)
+		let videoFrame =  RTCVideoFrame(buffer: rtcPixelBuffer, rotation: RTCVideoRotation._0, timeStampNs: Int64(timeStampNs))
+		source.capturer(capturer, didCapture: videoFrame)
+	}
+}
+
+class PluginRTCCameraCaptureController : PluginRTCVideoCaptureController {
+
 	private let DEFAULT_HEIGHT : Int32 = 480
 	private let DEFAULT_WIDTH : Int32 = 640
+
 	private let DEFAULT_FPS : Int = 15
 	private let DEFAULT_ASPECT_RATIO : Float32 = 4/3
 	private let FACING_MODE_USER : String = "user";
 	private let FACING_MODE_ENV : String = "environment";
 
 	var capturer: RTCCameraVideoCapturer
-	var isCapturing: Bool = false;
-	
-	// Default to the front camera.
-	var device: AVCaptureDevice?
-	var deviceFormat: AVCaptureDevice.Format?
-	var deviceFrameRate: Int?
-	
-	var constraints: NSDictionary = [:]
 	
 	init(capturer: RTCCameraVideoCapturer) {
 		self.capturer = capturer
@@ -139,7 +241,7 @@ class PluginRTCVideoCaptureController : NSObject {
 		return device != nil;
 	}
 	
-	func startCapture() -> Bool {
+	override func startCapture(completionHandler: ((Error?) -> Void)? = nil) -> Bool {
 		
 		// Stop previous capture in case of setConstraints, followed by startCapture
 		// aka future applyConstraints
@@ -167,10 +269,10 @@ class PluginRTCVideoCaptureController : NSObject {
 		
 		NSLog("PluginRTCVideoCaptureController#startCapture Capture started, device:%@, format:%@", device!, deviceFormat!);
 		
-		return true;
+		return isCapturing;
 	}
 	
-	func stopCapture() {
+	override func stopCapture() {
 		// TODO: stopCaptureWithCompletionHandler with DispatchSemaphore
 		if (isCapturing) {
 			capturer.stopCapture()
@@ -294,6 +396,7 @@ class PluginRTCVideoCaptureController : NSObject {
 		return captureDevices.firstObject as? AVCaptureDevice
 	}
 	
+	/*
 	func switchCamera() -> Bool {
 		
 		if (self.capturer.captureSession.isRunning) {
@@ -306,6 +409,7 @@ class PluginRTCVideoCaptureController : NSObject {
 		
 		return self.startCapture()
 	}
+	*/
 	
 	fileprivate func findAlternativeDevicePosition(currentDevice: AVCaptureDevice?) -> AVCaptureDevice? {
 		let captureDevices: NSArray = RTCCameraVideoCapturer.captureDevices() as NSArray
@@ -468,7 +572,7 @@ class PluginRTCVideoCaptureController : NSObject {
 	
 		return selectedFormat
 	}
-	
+
 	//
 	// constraints parsers
 	//

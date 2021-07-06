@@ -71,6 +71,7 @@
 		<source-file src="src/PluginMediaStream.swift" />
 		<source-file src="src/PluginMediaStreamTrack.swift" />
 		<source-file src="src/PluginGetUserMedia.swift" />
+		<source-file src="src/PluginGetDisplayMedia.swift" />
 		<source-file src="src/PluginEnumerateDevices.swift" />
 		<source-file src="src/PluginUtils.swift" />
 		<source-file src="src/PluginMediaStreamRenderer.swift" />
