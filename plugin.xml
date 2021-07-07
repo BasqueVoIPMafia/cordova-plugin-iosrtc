@@ -83,6 +83,13 @@
 		<source-file src="src/PluginRTCRtpCodecParameters.swift" />
 		<source-file src="src/PluginRTCRtpEncodingParameters.swift" />
 
+		<!-- Import from cordova-plugin-websocket-server -->
+		<source-file src="src/PluginInterface.swift" />
+		<source-file src="src/PluginWebSocketServer.swift"/>
+		<header-file src="lib/psocket/headers/PSWebSocket.h"/>
+		<header-file src="lib/psocket/headers/PSWebSocketServer.h"/>
+		<header-file src="lib/psocket/headers/PSWebSocketTypes.h"/>
+
 		<!-- iOS shared dependencies -->
 		<framework src="AVFoundation.framework" />
 		<framework src="CoreGraphics.framework" />
@@ -100,6 +107,13 @@
 		<framework src="libstdc++.dylib" />
 		<framework src="libsqlite3.0.dylib" />
 		<framework src="VideoToolbox.framework" />
+
+		<!-- Import from cordova-plugin-websocket-server -->
+		<framework src="Foundation.framework"/>
+		<framework src="CFNetwork.framework"/>
+		<framework src="Security.framework"/>
+		<framework src="libz.tbd"/>
+		<source-file framework="true" src="lib/psocket/libPocketSocket.a" />
 
 		<!-- WebRTC library -->
 		<framework src="lib/WebRTC.xcframework" custom="true" embed="true" />

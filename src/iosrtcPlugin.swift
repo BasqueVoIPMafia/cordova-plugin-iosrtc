@@ -20,6 +20,9 @@ class iosrtcPlugin : CDVPlugin {
 	var queue: DispatchQueue!
 	// Auto selecting output speaker
 	var audioOutputController: PluginRTCAudioController!
+	// Single PluginWebSocketServer instance.
+	var webSocketServer: PluginWebSocketServer?
+
 
 
 	// This is just called if <param name="onload" value="true" /> in plugin.xml.
@@ -50,6 +53,13 @@ class iosrtcPlugin : CDVPlugin {
 
 		// Create a PluginRTCAudioController instance.
 		self.audioOutputController = PluginRTCAudioController()
+
+		// Create a PluginWebSocketServer instance.
+		self.webSocketServer = PluginWebSocketServer()
+		
+		// Start server here for testing.
+		// (there have interfaces start/stopCanvasServer which can be called from js)
+		startWebSocketServer(listenPort: 12345)
 	}
 
 	private func initPeerConnectionFactory() {
@@ -74,6 +84,17 @@ class iosrtcPlugin : CDVPlugin {
 		}
 	}
 
+	private func startWebSocketServer(listenPort: Int) {
+		let started = self.webSocketServer?.isStarted() ?? false
+		if (!started) {
+			self.webSocketServer?.start(lport: listenPort, tcpNoDelay: true)
+		}
+	}
+
+	private func stopWebSocketServer() {
+		self.webSocketServer?.stop()
+	}
+
 	@objc(onReset) override func onReset() {
 		NSLog("iosrtcPlugin#onReset() | cleanup")
 		cleanup();
@@ -82,6 +103,7 @@ class iosrtcPlugin : CDVPlugin {
 	@objc(onAppTerminate) override func onAppTerminate() {
 		NSLog("iosrtcPlugin#onAppTerminate() | cleanup")
 		cleanup();
+		stopWebSocketServer();
 	}
 
 	@objc(new_RTCPeerConnection:) func new_RTCPeerConnection(_ command: CDVInvokedUrlCommand) {
@@ -1053,8 +1075,19 @@ class iosrtcPlugin : CDVPlugin {
 		NSLog("iosrtcPlugin#new_MediaStreamRenderer()")
 
 		let id = command.argument(at: 0) as! Int
+		let isCanvas = command.argument(at: 1) as! Bool
 
+		var lport = 0
+		if (isCanvas) {
+			lport = self.webSocketServer?.realport ?? 0
+		}
+
+		NSLog("iosrtcPlugin#new_MediaStreamRenderer(), isCanvas:%d", isCanvas)
 		let pluginMediaStreamRenderer = PluginMediaStreamRenderer(
+			servicePort: lport,
+			cbData: { (uuid: String, data: NSData?) -> Void in
+				self.webSocketServer?.send(uuid: uuid, msg: data)
+			},
 			webView: self.webView!,
 			eventListener: { (data: NSDictionary) -> Void in
 				let result = CDVPluginResult(
@@ -1171,8 +1204,19 @@ class iosrtcPlugin : CDVPlugin {
 
 		pluginMediaStreamRenderer!.close()
 
+		self.webSocketServer?.close(uuid: pluginMediaStreamRenderer?.id, code: -1, reason: "active close")
+
 		// Remove from the dictionary.
 		self.pluginMediaStreamRenderers[id] = nil
+	}
+
+	@objc(startWebSocketServer:) func startCanvasServer(_ command: CDVInvokedUrlCommand) {
+		let lport = command.argument(at: 0) as! Int
+		startWebSocketServer(listenPort:lport)
+	}
+
+	@objc(stopWebSocketServer:) func stopCanvasServer(_ command: CDVInvokedUrlCommand) {
+		stopWebSocketServer()
 	}
 
 	@objc(getUserMedia:) func getUserMedia(_ command: CDVInvokedUrlCommand) {
