@@ -29,6 +29,12 @@
 			</feature>
 		</config-file>
 
+		<preference name="PREFFIX_INVALID_MEDIA_ID" default="TRUE"/>
+
+		<config-file target="*-Info.plist" parent="PreffixInvalidMediaId">
+			<string>$PREFFIX_INVALID_MEDIA_ID</string>
+		</config-file>
+
 		<preference name="MANUAL_INIT_AUDIO_DEVICE" default="FALSE"/>
 
 		<config-file target="*-Info.plist" parent="ManualInitAudioDevice">
